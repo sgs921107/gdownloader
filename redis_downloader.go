@@ -27,7 +27,12 @@ func (d *RedisDownloader) Save(item DownloaderItem) {
 		d.Logger.Printf("serialize item failed: %s", err.Error())
 		return
 	}
-	d.Client.RPush(d.Topic, string(data))
+	// 如果指定了存储的topic则存入指定的topic
+	if topic, ok := item.Ctx["Topic"].(string); ok {
+		d.Client.RPush(topic, string(data))
+	} else {
+		d.Client.RPush(d.Topic, string(data))
+	}
 }
 
 // response钩子, 用于解析并存储每个请求的内容
