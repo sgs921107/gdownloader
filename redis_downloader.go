@@ -49,7 +49,8 @@ func (d *RedisDownloader) OnResponse(response *gspider.Response) {
 
 // 实例化一个分布式下载器
 func NewRedisDownloader(settings *DownloaderSettings) *RedisDownloader {
-	spider := gspider.NewRedisSpider(settings.RedisKey, &settings.SpiderSettings)
+	spiderSettings := settings.createSpiderSettings()
+	spider := gspider.NewRedisSpider(settings.RedisKey, spiderSettings)
 	rd := &RedisDownloader{
 		BaseDownloader: BaseDownloader{
 			Spider:   spider,
