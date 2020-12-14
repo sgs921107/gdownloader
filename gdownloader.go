@@ -28,8 +28,9 @@ func CtxToMap(ctx *gspider.Context) CtxMap {
 
 // 定义下载器的机构
 type BaseDownloader struct {
-	Spider *gspider.RedisSpider
-	Logger *log.Logger
+	Spider   *gspider.RedisSpider
+	Logger   *log.Logger
+	settings *DownloaderSettings
 }
 
 // 解析方法

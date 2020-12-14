@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"github.com/sgs921107/gcommon"
 	"net/http"
+	"net/url"
 )
 
 // 序列化request结构
@@ -56,10 +57,15 @@ func (r *Request) formatHeaders() *http.Header {
 
 // 将请求进行序列化
 func (r *Request) Marshal() ([]byte, error) {
+	// 对url进行校验
+	u, err := url.Parse(r.URL)
+	if err != nil {
+		return []byte{}, nil
+	}
 	body := gcommon.MapToBytes(r.Body)
 	headers := r.formatHeaders()
 	sr := &SerializableRequest{
-		URL:     r.URL,
+		URL:     u.String(),
 		Method:  r.Method,
 		Depth:   r.Depth,
 		Body:    body,

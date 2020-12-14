@@ -18,13 +18,14 @@ type SpiderSettings = gspider.SpiderSettings
 type DownloaderSettings struct {
 	SpiderSettings
 	RedisKey string
-	Topic    string
+	// 存储页面数据的最大数量  list元素超出将被裁剪, 避免内存过高
+	MaxTopicSize int64
 }
 
 // 配置实例demo
 var Settings = DownloaderSettings{
-	Topic:    "items",
-	RedisKey: "start_urls",
+	RedisKey:     "start_urls",
+	MaxTopicSize: 50000,
 	SpiderSettings: SpiderSettings{
 		Debug: false,
 		// 是否在启动前清空之前的数据

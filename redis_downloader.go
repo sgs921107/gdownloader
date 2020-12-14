@@ -7,17 +7,15 @@
 package gdownloader
 
 import (
-	"github.com/go-redis/redis"
 	"github.com/sgs921107/gcommon"
+	"github.com/sgs921107/gredis"
 	"github.com/sgs921107/gspider"
 )
 
 // 基于redis的分布式下载器
 type RedisDownloader struct {
 	BaseDownloader
-	Client *redis.Client
-	// RedisKey string
-	Topic string
+	Client *gredis.Client
 }
 
 // 存储方法
@@ -27,11 +25,18 @@ func (d *RedisDownloader) Save(item DownloaderItem) {
 		d.Logger.Printf("serialize item failed: %s", err.Error())
 		return
 	}
-	// 如果指定了存储的topic则存入指定的topic
-	if topic, ok := item.Ctx["Topic"].(string); ok {
+	// 如果指定了存储的topic则存入指定的topic, 否则以url的host为topic
+	topic, ok := item.Ctx["Topic"].(string)
+	if !ok {
+		prefix := d.settings.RedisPrefix
+		host, _ := gcommon.FetchUrlHost(item.Url)
+		topic = prefix + ":items:" + host
+	}
+	size := d.settings.MaxTopicSize
+	if size == 0 {
 		d.Client.RPush(topic, string(data))
 	} else {
-		d.Client.RPush(d.Topic, string(data))
+		d.Client.RPushTrim(topic, size, string(data))
 	}
 }
 
@@ -45,15 +50,13 @@ func (d *RedisDownloader) OnResponse(response *gspider.Response) {
 // 实例化一个分布式下载器
 func NewRedisDownloader(settings *DownloaderSettings) *RedisDownloader {
 	spider := gspider.NewRedisSpider(settings.RedisKey, &settings.SpiderSettings)
-	prefix := settings.RedisPrefix
 	rd := &RedisDownloader{
 		BaseDownloader: BaseDownloader{
-			Spider: spider,
-			Logger: spider.Logger,
+			Spider:   spider,
+			Logger:   spider.Logger,
+			settings: settings,
 		},
 		Client: spider.Client,
-		// RedisKey: prefix + ":" + settings.RedisKey,
-		Topic: prefix + ":" + settings.Topic,
 	}
 	return rd
 }
