@@ -22,17 +22,17 @@ import (
 	"log"
 )
 
-type Sender struct {
+type BaseSender struct {
 	Client    *redis.Client
 	UrlsQueue string
 	ReqsQueue string
 }
 
-func (s *Sender) AddURL(url string) {
+func (s *BaseSender) AddURL(url string) {
 	s.Client.RPush(s.UrlsQueue, url)
 }
 
-func (s *Sender) AddRequest(req *Request) {
+func (s *BaseSender) AddRequest(req *Request) {
 	sr, err := req.Marshal()
 	if err != nil {
 		log.Print("Serialize request failed: req: %v, err msg: %s", req, err.Error())
@@ -41,10 +41,12 @@ func (s *Sender) AddRequest(req *Request) {
 	s.Client.RPush(s.ReqsQueue, sr)
 }
 
-func NewSender(client *redis.Client, urlsQueue string, reqsQueue string) BaseSender {
-	return &Sender{
+func NewSender(client *redis.Client, urlsQueue string, reqsQueue string) Sender {
+	var sender Sender
+	sender = &BaseSender{
 		Client:    client,
 		UrlsQueue: urlsQueue,
 		ReqsQueue: reqsQueue,
 	}
+	return sender
 }
