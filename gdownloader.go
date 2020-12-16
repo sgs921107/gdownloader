@@ -13,10 +13,10 @@ import (
 	"log"
 )
 
-// 上下文的类型
+// CtxMap 上下文的类型
 type CtxMap map[string]interface{}
 
-// 将response中的上下文转为自定义的上下文结构
+// CtxToMap 将response中的上下文转为自定义的上下文结构
 func CtxToMap(ctx *gspider.Context) CtxMap {
 	data := make(CtxMap)
 	ctx.ForEach(func(k string, v interface{}) interface{} {
@@ -26,18 +26,18 @@ func CtxToMap(ctx *gspider.Context) CtxMap {
 	return data
 }
 
-// 定义下载器的机构
+// BaseDownloader 定义下载器的机构
 type BaseDownloader struct {
 	Spider   *gspider.RedisSpider
 	Logger   *log.Logger
 	settings *DownloaderSettings
 }
 
-// 解析方法
+// Parse 解析方法
 func (d *BaseDownloader) Parse(response *gspider.Response) DownloaderItem {
 	item := DownloaderItem{}
 	req := response.Request
-	item.Url = req.URL.String()
+	item.URL = req.URL.String()
 	item.Method = req.Method
 	item.Depth = req.Depth
 	item.ReqBody = gcommon.ReaderToString(req.Body)
@@ -48,9 +48,9 @@ func (d *BaseDownloader) Parse(response *gspider.Response) DownloaderItem {
 	return item
 }
 
-// 存储方法
+// Save 存储方法
 func (d *BaseDownloader) Save(item DownloaderItem) {
-	data, err := item.ToJson()
+	data, err := item.ToJSON()
 	if err != nil {
 		d.Logger.Printf("serialize item failed: %s", err.Error())
 		return
@@ -58,18 +58,18 @@ func (d *BaseDownloader) Save(item DownloaderItem) {
 	d.Logger.Print(string(data))
 }
 
-// response钩子, 用于解析并存储每个请求的内容
+// OnResponse response钩子, 用于解析并存储每个请求的内容
 func (d *BaseDownloader) OnResponse(response *gspider.Response) {
 	item := d.Parse(response)
 	d.Save(item)
 }
 
-// 记录开始下载时的时间, 单位: 纳秒
+// AddDownloadTime 记录开始下载时的时间, 单位: 纳秒
 func (d *BaseDownloader) AddDownloadTime(r *gspider.Request) {
 	r.Ctx.Put("downloadTime", gcommon.TimeStamp(1))
 }
 
-// 记录接收到返回时的时间, 单位: 纳秒
+// AddDownloadedTime 记录接收到返回时的时间, 单位: 纳秒
 func (d *BaseDownloader) AddDownloadedTime(r *gspider.Response) {
 	r.Ctx.Put("downloadedTime", gcommon.TimeStamp(1))
 }

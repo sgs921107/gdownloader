@@ -12,10 +12,10 @@ import (
 	"reflect"
 )
 
-// 起别名
+// SpiderSettings spider settings type
 type SpiderSettings = gspider.SpiderSettings
 
-// downloader的配置结构
+// DownloaderSettings downloader的配置结构
 // 使数据结构简单，不继承自spider settings, 通过反射来生成spdier settings
 type DownloaderSettings struct {
 	// SpiderSettings
@@ -68,7 +68,7 @@ func (s DownloaderSettings) createSpiderSettings() *SpiderSettings {
 	return spiderSettings
 }
 
-// 配置实例demo
+// Settings 配置实例demo
 var Settings = DownloaderSettings{
 	RedisKey:     "start_urls",
 	MaxTopicSize: 50000,

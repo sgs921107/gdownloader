@@ -24,7 +24,7 @@ import (
 	"net/url"
 )
 
-// 序列化request结构
+// SerializableRequest 序列化request结构
 type SerializableRequest struct {
 	URL     string
 	Method  string
@@ -35,7 +35,7 @@ type SerializableRequest struct {
 	Headers *http.Header
 }
 
-// 请求结构
+// Request 请求结构
 type Request struct {
 	URL     string
 	Method  string
@@ -55,7 +55,7 @@ func (r *Request) formatHeaders() *http.Header {
 	return &headers
 }
 
-// 将请求进行序列化
+// Marshal 将请求进行序列化
 func (r *Request) Marshal() ([]byte, error) {
 	// 对url进行校验
 	u, err := url.Parse(r.URL)

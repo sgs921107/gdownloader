@@ -17,6 +17,7 @@ downloader的任务只负责对start urls队列和真实的请求队列queue进�
 
 package send
 
+// Sender sender
 type Sender interface {
 	AddURL(url string)
 	AddRequest(req *Request)

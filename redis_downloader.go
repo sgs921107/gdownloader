@@ -4,6 +4,7 @@
 	> Mail: xiangcai@gmail.com
 	> Created Time: 2020年12月09日 星期三 10时41分41秒
  ************************************************************************/
+
 package gdownloader
 
 import (
@@ -12,15 +13,15 @@ import (
 	"github.com/sgs921107/gspider"
 )
 
-// 基于redis的分布式下载器
+// RedisDownloader 基于redis的分布式下载器
 type RedisDownloader struct {
 	BaseDownloader
 	Client *gredis.Client
 }
 
-// 存储方法
+// Save 存储方法
 func (d *RedisDownloader) Save(item DownloaderItem) {
-	data, err := item.ToJson()
+	data, err := item.ToJSON()
 	if err != nil {
 		d.Logger.Printf("serialize item failed: %s", err.Error())
 		return
@@ -29,7 +30,7 @@ func (d *RedisDownloader) Save(item DownloaderItem) {
 	topic, ok := item.Ctx["Topic"].(string)
 	if !ok {
 		prefix := d.settings.RedisPrefix
-		host, _ := gcommon.FetchUrlHost(item.Url)
+		host, _ := gcommon.FetchURLHost(item.URL)
 		topic = prefix + ":items:" + host
 	}
 	size := d.settings.MaxTopicSize
@@ -40,14 +41,14 @@ func (d *RedisDownloader) Save(item DownloaderItem) {
 	}
 }
 
-// response钩子, 用于解析并存储每个请求的内容
+// OnResponse response钩子, 用于解析并存储每个请求的内容
 func (d *RedisDownloader) OnResponse(response *gspider.Response) {
 	item := d.Parse(response)
 	item.Ctx["saveTime"] = gcommon.TimeStamp(1)
 	d.Save(item)
 }
 
-// 实例化一个分布式下载器
+// NewRedisDownloader 实例化一个分布式下载器
 func NewRedisDownloader(settings *DownloaderSettings) *RedisDownloader {
 	spiderSettings := settings.createSpiderSettings()
 	spider := gspider.NewRedisSpider(settings.RedisKey, spiderSettings)

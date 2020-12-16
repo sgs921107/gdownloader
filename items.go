@@ -12,9 +12,9 @@ import (
 	"net/http"
 )
 
-// 下载器解析下载内容的结构
+// DownloaderItem 下载器解析下载内容的结构
 type DownloaderItem struct {
-	Url      string
+	URL      string
 	ReqBody  string
 	RespBody string
 	Ctx      map[string]interface{}
@@ -24,10 +24,12 @@ type DownloaderItem struct {
 	Headers  http.Header
 }
 
-func (i DownloaderItem) ToMap() (item.ItemMap, error) {
-	return item.ItemToMap(i)
+// ToMap item to map
+func (i DownloaderItem) ToMap() (item.Map, error) {
+	return item.ToMap(i)
 }
 
-func (i DownloaderItem) ToJson() ([]byte, error) {
-	return item.ItemToJson(i)
+// ToJSON item to json
+func (i DownloaderItem) ToJSON() ([]byte, error) {
+	return item.ToJSON(i)
 }
