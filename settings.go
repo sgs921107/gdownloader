@@ -56,6 +56,10 @@ func (s DownloaderSettings) createSpiderSettings() *SpiderSettings {
 		field := sst.Field(i)
 		name := field.Name
 		val := dsv.FieldByName(name)
+		// 如果值是无效的则跳过
+		if !val.IsValid() {
+			continue
+		}
 		switch field.Type.Name() {
 		case "string":
 			ssv.FieldByName(name).SetString(val.String())
