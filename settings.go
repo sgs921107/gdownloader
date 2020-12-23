@@ -30,10 +30,7 @@ type DownloaderSettings struct {
 	RotationMaxAge	time.Duration
 	FlushOnStart   	bool // 开始前清空之前的数据
 	ConcurrentReqs 	int  // 并发
-	MaxDepth       	int  // 最大深度
-	DontFilter     	bool // 不过滤
 	EnableCookies  	bool // 启用cookies
-	Async          	bool // 启用异步
 	KeepAlive      	bool
 	Timeout        	time.Duration
 	MaxConns       	int
@@ -76,6 +73,8 @@ func (s DownloaderSettings) createSpiderSettings() *SpiderSettings {
 			fmt.Printf("Warning: miss a option: %s, val: %v", name, val)
 		}
 	}
+	spiderSettings.DontFilter = true
+	spiderSettings.Async = true
 	return spiderSettings
 }
 
@@ -87,12 +86,6 @@ var SettingsDemo = DownloaderSettings{
 	// 是否在启动前清空之前的数据
 	FlushOnStart: false,
 	ConcurrentReqs: 16,
-	// 最大深度
-	MaxDepth: 1,
-	// 允许重复抓取
-	DontFilter: true,
-	// 启用异步
-	Async:         true,
 	EnableCookies: false,
 	// 是否开启长连接 bool
 	KeepAlive: true,
