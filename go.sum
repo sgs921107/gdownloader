@@ -128,6 +128,8 @@ github.com/sgs921107/gspider v0.0.0-20201223111315-652c29800852 h1:KZRlKxQQSsnCU
 github.com/sgs921107/gspider v0.0.0-20201223111315-652c29800852/go.mod h1:IEPSrgHtEcffPhX69HBeVhglKxeX+lIrnGTzgi4Rufg=
 github.com/sgs921107/gspider v0.0.0-20201223112829-6971d784adad h1:d5GRdjZDnO+fTNTc3t+KvPUaxGUc9DnfVOUETGkscnw=
 github.com/sgs921107/gspider v0.0.0-20201223112829-6971d784adad/go.mod h1:IEPSrgHtEcffPhX69HBeVhglKxeX+lIrnGTzgi4Rufg=
+github.com/sgs921107/gspider v0.0.0-20201223121748-d0e16db08361 h1:yQjfLb6YjnsLF2q7iUggRoqaVmBTQ9VeWVXT+jIKi0E=
+github.com/sgs921107/gspider v0.0.0-20201223121748-d0e16db08361/go.mod h1:IEPSrgHtEcffPhX69HBeVhglKxeX+lIrnGTzgi4Rufg=
 github.com/sirupsen/logrus v1.7.0 h1:ShrD1U9pZB12TX0cVy0DtePoCH97K8EtX+mg7ZARUtM=
 github.com/sirupsen/logrus v1.7.0/go.mod h1:yWOB1SBYBC5VeMP7gHvWumXLIWorT60ONWic61uBYv0=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
