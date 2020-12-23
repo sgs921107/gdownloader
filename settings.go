@@ -8,8 +8,11 @@
 package gdownloader
 
 import (
-	"github.com/sgs921107/gspider"
+	"fmt"
+	"time"
 	"reflect"
+
+	"github.com/sgs921107/gspider"
 )
 
 // SpiderSettings spider settings type
@@ -20,30 +23,32 @@ type SpiderSettings = gspider.SpiderSettings
 type DownloaderSettings struct {
 	// SpiderSettings
 	//------------------------------------------------------------------
-	Debug          bool
-	LogFile        string
-	LogPrefix      string
-	LogFlag        int
-	FlushOnStart   bool // 开始前清空之前的数据
-	UserAgent      string
-	ConcurrentReqs int  // 并发
-	MaxDepth       int  // 最大深度
-	DontFilter     bool // 不过滤
-	EnableCookies  bool // 启用cookies
-	Async          bool // 启用异步
-	KeepAlive      bool
-	Timeout        int
-	MaxConns       int
+	Debug       	bool
+	LogLevel		string
+	LogFile     	string
+	RotationTime	time.Duration
+	RotationMaxAge	time.Duration
+	LogFlag        	int
+	FlushOnStart   	bool // 开始前清空之前的数据
+	UserAgent      	string
+	ConcurrentReqs 	int  // 并发
+	MaxDepth       	int  // 最大深度
+	DontFilter     	bool // 不过滤
+	EnableCookies  	bool // 启用cookies
+	Async          	bool // 启用异步
+	KeepAlive      	bool
+	Timeout        	time.Duration
+	MaxConns       	int
 	// 以下使用redis spider时需要配置
-	RedisAddr      string
-	RedisDB        int
-	RedisPassword  string
-	RedisPrefix    string
-	MaxIdleTimeout int // 最大闲置时间, redis spider使用 0表示一直运行
+	RedisAddr      	string
+	RedisDB        	int
+	RedisPassword  	string
+	RedisPrefix    	string
+	MaxIdleTimeout 	time.Duration // 最大闲置时间, redis spider使用 0表示一直运行
 	//------------------------------------------------------------------
-	RedisKey string
+	RedisKey 		string
 	// 存储页面数据的最大数量  list元素超出将被裁剪, 避免内存过高
-	MaxTopicSize int64
+	MaxTopicSize 	int64
 }
 
 // 通过反射生成spidersettings
@@ -67,13 +72,17 @@ func (s DownloaderSettings) createSpiderSettings() *SpiderSettings {
 			ssv.FieldByName(name).SetInt(val.Int())
 		case "bool":
 			ssv.FieldByName(name).SetBool(val.Bool())
+		case "Duration":
+			ssv.FieldByName(name).SetInt(val.Int())
+		default:
+			fmt.Printf("Warning: miss a option: %s, val: %v", name, val)
 		}
 	}
 	return spiderSettings
 }
 
-// Settings 配置实例demo
-var Settings = DownloaderSettings{
+// SettingsDemo 配置实例demo
+var SettingsDemo = DownloaderSettings{
 	RedisKey:     "start_urls",
 	MaxTopicSize: 50000,
 	Debug:        false,
@@ -92,14 +101,14 @@ var Settings = DownloaderSettings{
 	// 是否开启长连接 bool
 	KeepAlive: true,
 	// 超时  单位：秒
-	Timeout: 5,
+	Timeout: time.Second * 5,
 	// 最大连接数
 	MaxConns: 100,
-	// 空闲超时 单位: 秒
 	// 如果不为""则使用redis存储数据
 	RedisAddr:      "172.17.0.1:6379",
 	RedisDB:        2,
 	RedisPassword:  "qaz123",
 	RedisPrefix:    "simple",
-	MaxIdleTimeout: 10,
+	// 空闲超时
+	MaxIdleTimeout: time.Second * 10,
 }

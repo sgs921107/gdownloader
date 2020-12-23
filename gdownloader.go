@@ -10,7 +10,6 @@ package gdownloader
 import (
 	"github.com/sgs921107/gcommon"
 	"github.com/sgs921107/gspider"
-	"log"
 )
 
 // CtxMap 上下文的类型
@@ -29,7 +28,7 @@ func CtxToMap(ctx *gspider.Context) CtxMap {
 // BaseDownloader 定义下载器的机构
 type BaseDownloader struct {
 	Spider   *gspider.RedisSpider
-	Logger   *log.Logger
+	Logger	 *gspider.Logger
 	settings *DownloaderSettings
 }
 
@@ -52,10 +51,12 @@ func (d *BaseDownloader) Parse(response *gspider.Response) DownloaderItem {
 func (d *BaseDownloader) Save(item DownloaderItem) {
 	data, err := item.ToJSON()
 	if err != nil {
-		d.Logger.Printf("serialize item failed: %s", err.Error())
+		d.Logger.WithFields(gspider.LogFields{
+			"errMsg": err.Error(),
+		}).Error("Serialize item failed")
 		return
 	}
-	d.Logger.Print(string(data))
+	d.Logger.Debug(string(data))
 }
 
 // OnResponse response钩子, 用于解析并存储每个请求的内容
