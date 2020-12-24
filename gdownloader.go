@@ -30,6 +30,7 @@ type BaseDownloader struct {
 	Spider   *gspider.RedisSpider
 	Logger	 *gspider.Logger
 	settings *DownloaderSettings
+	onResponse	 func(resp *gspider.Response)
 }
 
 // Parse 解析方法
@@ -48,7 +49,7 @@ func (d *BaseDownloader) Parse(response *gspider.Response) DownloaderItem {
 }
 
 // Save 存储方法
-func (d *BaseDownloader) Save(item DownloaderItem) {
+func (d *BaseDownloader) save(item DownloaderItem) {
 	data, err := item.ToJSON()
 	if err != nil {
 		d.Logger.WithFields(gspider.LogFields{
@@ -62,7 +63,7 @@ func (d *BaseDownloader) Save(item DownloaderItem) {
 // OnResponse response钩子, 用于解析并存储每个请求的内容
 func (d *BaseDownloader) OnResponse(response *gspider.Response) {
 	item := d.Parse(response)
-	d.Save(item)
+	d.save(item)
 }
 
 // AddDownloadTime 记录开始下载时的时间, 单位: 纳秒
@@ -73,4 +74,22 @@ func (d *BaseDownloader) AddDownloadTime(r *gspider.Request) {
 // AddDownloadedTime 记录接收到返回时的时间, 单位: 纳秒
 func (d *BaseDownloader) AddDownloadedTime(r *gspider.Response) {
 	r.Ctx.Put("downloadedTime", gcommon.TimeStamp(1))
+}
+
+func (d *BaseDownloader) init() {
+	if d.Spider == nil {
+		panic("Spider Not Instance")
+	}
+	if d.onResponse == nil {
+		d.onResponse = d.OnResponse
+	}
+	d.Spider.OnRequest(d.AddDownloadTime)
+	d.Spider.OnResponse(d.AddDownloadedTime)
+	d.Spider.OnResponse(d.onResponse)
+}
+
+// Run run downloader
+func (d *BaseDownloader) Run() {
+	d.init()
+	d.Spider.Start()
 }

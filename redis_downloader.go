@@ -20,7 +20,7 @@ type RedisDownloader struct {
 }
 
 // Save 存储方法
-func (d *RedisDownloader) Save(item DownloaderItem) {
+func (d *RedisDownloader) save(item DownloaderItem) {
 	data, err := item.ToJSON()
 	if err != nil {
 		d.Logger.WithFields(gspider.LogFields{
@@ -47,7 +47,7 @@ func (d *RedisDownloader) Save(item DownloaderItem) {
 func (d *RedisDownloader) OnResponse(response *gspider.Response) {
 	item := d.Parse(response)
 	item.Ctx["saveTime"] = gcommon.TimeStamp(1)
-	d.Save(item)
+	d.save(item)
 }
 
 // NewRedisDownloader 实例化一个分布式下载器
@@ -62,5 +62,6 @@ func NewRedisDownloader(settings *DownloaderSettings) *RedisDownloader {
 		},
 		Client: spider.Client,
 	}
+	rd.onResponse = rd.OnResponse
 	return rd
 }

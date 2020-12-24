@@ -130,6 +130,8 @@ github.com/sgs921107/gspider v0.0.0-20201223112829-6971d784adad h1:d5GRdjZDnO+fT
 github.com/sgs921107/gspider v0.0.0-20201223112829-6971d784adad/go.mod h1:IEPSrgHtEcffPhX69HBeVhglKxeX+lIrnGTzgi4Rufg=
 github.com/sgs921107/gspider v0.0.0-20201223121748-d0e16db08361 h1:yQjfLb6YjnsLF2q7iUggRoqaVmBTQ9VeWVXT+jIKi0E=
 github.com/sgs921107/gspider v0.0.0-20201223121748-d0e16db08361/go.mod h1:IEPSrgHtEcffPhX69HBeVhglKxeX+lIrnGTzgi4Rufg=
+github.com/sgs921107/gspider v0.0.0-20201224064659-542fe80fb109 h1:ObT5TQ6x2aKcdJ68VZIdyxTfHkSQ6QBPBcicZU5xLTI=
+github.com/sgs921107/gspider v0.0.0-20201224064659-542fe80fb109/go.mod h1:IEPSrgHtEcffPhX69HBeVhglKxeX+lIrnGTzgi4Rufg=
 github.com/sirupsen/logrus v1.7.0 h1:ShrD1U9pZB12TX0cVy0DtePoCH97K8EtX+mg7ZARUtM=
 github.com/sirupsen/logrus v1.7.0/go.mod h1:yWOB1SBYBC5VeMP7gHvWumXLIWorT60ONWic61uBYv0=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
@@ -167,6 +169,8 @@ golang.org/x/net v0.0.0-20200813134508-3edf25e44fcc/go.mod h1:/O7V0waA8r7cgGh81R
 golang.org/x/net v0.0.0-20201202161906-c7110b5ffcbb/go.mod h1:sp8m0HH+o8qH0wwXwYZr8TS3Oi6o0r6Gce1SSxlDquU=
 golang.org/x/net v0.0.0-20201216054612-986b41b23924 h1:QsnDpLLOKwHBBDa8nDws4DYNc/ryVW2vCpxCs09d4PY=
 golang.org/x/net v0.0.0-20201216054612-986b41b23924/go.mod h1:m0MpNAwzfU5UDzcl9v0D8zg8gWTRqZa9RBIspLL5mdg=
+golang.org/x/net v0.0.0-20201224014010-6772e930b67b h1:iFwSg7t5GZmB/Q5TjiEAsdoLDrdJRC1RiF2WhuV29Qw=
+golang.org/x/net v0.0.0-20201224014010-6772e930b67b/go.mod h1:m0MpNAwzfU5UDzcl9v0D8zg8gWTRqZa9RBIspLL5mdg=
 golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=
 golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.0.0-20181108010431-42b317875d0f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=

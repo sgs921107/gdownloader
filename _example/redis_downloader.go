@@ -14,8 +14,6 @@ import (
 func main() {
 	// 生成一个redis downloader实例
 	rd := gdownloader.NewRedisDownloader(&gdownloader.SettingsDemo)
-	rd.Spider.OnRequest(rd.AddDownloadTime)
-	rd.Spider.OnResponse(rd.AddDownloadedTime)
-	rd.Spider.OnResponse(rd.OnResponse)
-	rd.Spider.Start()
+	rd.Spider.Client.RPush(rd.Spider.RedisKey, "http://www.baidu.com")
+	rd.Run()
 }

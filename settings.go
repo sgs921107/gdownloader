@@ -33,7 +33,6 @@ type DownloaderSettings struct {
 	EnableCookies  	bool // 启用cookies
 	KeepAlive      	bool
 	Timeout        	time.Duration
-	MaxConns       	int
 	// 以下使用redis spider时需要配置
 	RedisAddr      	string
 	RedisDB        	int
@@ -80,24 +79,22 @@ func (s DownloaderSettings) createSpiderSettings() *SpiderSettings {
 
 // SettingsDemo 配置实例demo
 var SettingsDemo = DownloaderSettings{
-	RedisKey:     "start_urls",
-	MaxTopicSize: 50000,
 	Debug:        false,
 	// 是否在启动前清空之前的数据
 	FlushOnStart: false,
 	ConcurrentReqs: 16,
-	EnableCookies: false,
+	EnableCookies: true,
 	// 是否开启长连接 bool
-	KeepAlive: true,
+	KeepAlive: false,
 	// 超时  单位：秒
 	Timeout: time.Second * 5,
-	// 最大连接数
-	MaxConns: 100,
 	// 如果不为""则使用redis存储数据
 	RedisAddr:      "172.17.0.1:6379",
-	RedisDB:        2,
+	RedisDB:        3,
 	RedisPassword:  "qaz123",
 	RedisPrefix:    "simple",
 	// 空闲超时
 	MaxIdleTimeout: time.Second * 10,
+	RedisKey:     "start_urls",
+	MaxTopicSize: 50000,
 }
