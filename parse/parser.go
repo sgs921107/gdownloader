@@ -22,7 +22,7 @@ func (p *BaseParser) Unmarshal(page string) (*Response, error) {
 
 // Parse parse func
 func (p *BaseParser) Parse(resp *Response) {
-	data, err := resp.ToMap()
+	data, err := resp.ToMapSA()
 	if err != nil {
 		fmt.Println("Resp To Map Failed: " + err.Error())
 		return

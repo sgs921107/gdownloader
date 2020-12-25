@@ -34,8 +34,8 @@ type BaseDownloader struct {
 }
 
 // Parse 解析方法
-func (d *BaseDownloader) Parse(response *gspider.Response) DownloaderItem {
-	item := DownloaderItem{}
+func (d *BaseDownloader) Parse(response *gspider.Response) *DownloaderItem {
+	item := &DownloaderItem{}
 	req := response.Request
 	item.URL = req.URL.String()
 	item.Method = req.Method
@@ -49,7 +49,7 @@ func (d *BaseDownloader) Parse(response *gspider.Response) DownloaderItem {
 }
 
 // Save 存储方法
-func (d *BaseDownloader) save(item DownloaderItem) {
+func (d *BaseDownloader) save(item *DownloaderItem) {
 	data, err := item.ToJSON()
 	if err != nil {
 		d.Logger.WithFields(gspider.LogFields{

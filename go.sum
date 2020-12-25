@@ -72,6 +72,8 @@ github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpO
 github.com/jawher/mow.cli v1.1.0/go.mod h1:aNaQlc7ozF3vw6IJ2dHjp2ZFiA4ozMIYY6PyuRJwlUg=
 github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 h1:IPJ3dvxmJ4uczJe5YQdrYB16oTJlGSC/OyZDqUk9xX4=
 github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869/go.mod h1:cJ6Cj7dQo+O6GJNiMx+Pa94qKj+TG8ONdKHgMNIyyag=
+github.com/joho/godotenv v1.3.0 h1:Zjp+RcGpHhGlrMbJzXTrZZPrWj+1vfm90La1wgB6Bhc=
+github.com/joho/godotenv v1.3.0/go.mod h1:7hK45KPybAkOC6peb+G5yklZfMxEjkZhHbwpqxOKXbg=
 github.com/jonboulle/clockwork v0.2.2 h1:UOGuzwb1PwsrDAObMuhUnj0p5ULPj8V/xJ7Kx9qUBdQ=
 github.com/jonboulle/clockwork v0.2.2/go.mod h1:Pkfl5aHPm1nk2H9h0bjmnJD/BcgbGXUBGnn1kMkgxc8=
 github.com/kennygrant/sanitize v1.2.4 h1:gN25/otpP5vAsO2djbMhF/LQX6R7+O1TB4yv8NzpJ3o=
@@ -92,6 +94,8 @@ github.com/nxadm/tail v1.4.4 h1:DQuhQpB1tVlglWS2hLQ5OV6B5r8aGxSrPc5Qo6uTN78=
 github.com/nxadm/tail v1.4.4/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=
 github.com/nxadm/tail v1.4.5 h1:obHEce3upls1IBn1gTw/o7bCv7OJb6Ib/o7wNO+4eKw=
 github.com/nxadm/tail v1.4.5/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=
+github.com/nxadm/tail v1.4.6 h1:11TGpSHY7Esh/i/qnq02Jo5oVrI1Gue8Slbq0ujPZFQ=
+github.com/nxadm/tail v1.4.6/go.mod h1:+ncqLTQzXmGhMZNUePPaPqPvBxHAIsmXswZKocGu+AU=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.12.1/go.mod h1:zj2OWP4+oCPe1qIXoGWkgMRwljMUYCdkwsT2108oapk=
 github.com/onsi/ginkgo v1.14.2 h1:8mVmC9kjFFmA8H4pKMUhcblgifdkOIXPvbhN1T36q1M=
@@ -114,6 +118,8 @@ github.com/sgs921107/gcommon v0.0.0-20201216112724-e721c87dfb4d h1:UnuwWQoIKfubD
 github.com/sgs921107/gcommon v0.0.0-20201216112724-e721c87dfb4d/go.mod h1:vA/dFbWmbvb7NJ7Gs+iHjuqa4Sx+O9nUSFp9T7fV/rI=
 github.com/sgs921107/gcommon v0.0.0-20201223083800-e95475f225d3 h1:+aF3LNQSE/Y9qMN8f2ZanOK7M+PTwzFiVOL6EP21Hcw=
 github.com/sgs921107/gcommon v0.0.0-20201223083800-e95475f225d3/go.mod h1:vA/dFbWmbvb7NJ7Gs+iHjuqa4Sx+O9nUSFp9T7fV/rI=
+github.com/sgs921107/gcommon v0.0.0-20201225101052-48861b4ab321 h1:nfweypm9TjHa5Ht4/6Bs1z/x/Xg64NVoYSfxg83sbm4=
+github.com/sgs921107/gcommon v0.0.0-20201225101052-48861b4ab321/go.mod h1:jfMVWDU3gZFIGiLky1xPGndrJ+0c912+XWLtpA0/UXw=
 github.com/sgs921107/glogging v0.0.0-20201223091949-fb29e1042839 h1:67IS50uMPf/5skvy+EUN1qPa0wc31CCjVYW2F4IDdYs=
 github.com/sgs921107/glogging v0.0.0-20201223091949-fb29e1042839/go.mod h1:SORupuNXiHuYHpSWTDESa09b7NkwfG5xMobWD1FJFHk=
 github.com/sgs921107/gredis v0.0.0-20201214041554-3ed0ddf86aed h1:lS9ukgvE2DtM58nt6+QS21GIJZTcDq70mzyCTNynpmY=
@@ -132,6 +138,10 @@ github.com/sgs921107/gspider v0.0.0-20201223121748-d0e16db08361 h1:yQjfLb6YjnsLF
 github.com/sgs921107/gspider v0.0.0-20201223121748-d0e16db08361/go.mod h1:IEPSrgHtEcffPhX69HBeVhglKxeX+lIrnGTzgi4Rufg=
 github.com/sgs921107/gspider v0.0.0-20201224064659-542fe80fb109 h1:ObT5TQ6x2aKcdJ68VZIdyxTfHkSQ6QBPBcicZU5xLTI=
 github.com/sgs921107/gspider v0.0.0-20201224064659-542fe80fb109/go.mod h1:IEPSrgHtEcffPhX69HBeVhglKxeX+lIrnGTzgi4Rufg=
+github.com/sgs921107/gspider v0.0.0-20201225102131-4e867f882371 h1:lc+F9maM3MDsE0OPZ+oBheeWPPQjqO/TJae3rwAiF8I=
+github.com/sgs921107/gspider v0.0.0-20201225102131-4e867f882371/go.mod h1:Bpa82PQ3m4tI5jKI1vu/0YNpcDRQ1IfOpUEw62A+SsM=
+github.com/sgs921107/gspider v0.0.0-20201225103714-14dd84c891de h1:wUVjFilxAgpslJcqTKNg4TAcwt2BYSbFzYCepuoC738=
+github.com/sgs921107/gspider v0.0.0-20201225103714-14dd84c891de/go.mod h1:Bpa82PQ3m4tI5jKI1vu/0YNpcDRQ1IfOpUEw62A+SsM=
 github.com/sirupsen/logrus v1.7.0 h1:ShrD1U9pZB12TX0cVy0DtePoCH97K8EtX+mg7ZARUtM=
 github.com/sirupsen/logrus v1.7.0/go.mod h1:yWOB1SBYBC5VeMP7gHvWumXLIWorT60ONWic61uBYv0=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
@@ -145,6 +155,8 @@ github.com/tebeka/strftime v0.1.5 h1:1NQKN1NiQgkqd/2moD6ySP/5CoZQsKa1d3ZhJ44Jpmg
 github.com/tebeka/strftime v0.1.5/go.mod h1:29/OidkoWHdEKZqzyDLUyC+LmgDgdHo4WAFCDT7D/Ig=
 github.com/temoto/robotstxt v1.1.1 h1:Gh8RCs8ouX3hRSxxK7B1mO5RFByQ4CmJZDwgom++JaA=
 github.com/temoto/robotstxt v1.1.1/go.mod h1:+1AmkuG3IYkh1kv0d2qEB9Le88ehNO0zwOr3ujewlOo=
+github.com/timest/env v0.0.0-20180717050204-5fce78d35255 h1:dDesTEcEuYIc8RNMm5dWWxamlr7m4x4MhCryWDBVaik=
+github.com/timest/env v0.0.0-20180717050204-5fce78d35255/go.mod h1:PKIuG7CPWS0/fq1dphTqvt0RZm0w4fp4eZxBQDJhJxs=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20190605123033-f99c8df09eb5/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
 golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=

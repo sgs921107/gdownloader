@@ -20,7 +20,7 @@ type RedisDownloader struct {
 }
 
 // Save 存储方法
-func (d *RedisDownloader) save(item DownloaderItem) {
+func (d *RedisDownloader) save(item *DownloaderItem) {
 	data, err := item.ToJSON()
 	if err != nil {
 		d.Logger.WithFields(gspider.LogFields{
