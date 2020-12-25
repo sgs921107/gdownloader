@@ -38,9 +38,9 @@ func main() {
 	var url = "https://www.example.com"
 	client := redis.NewClient(&redis.Options{
 		// 你自己的redis配置
-		Addr:     gdownloader.Settings.RedisAddr,
-		Password: gdownloader.Settings.RedisPassword,
-		DB:       gdownloader.Settings.RedisDB,
+		Addr:     gdownloader.SettingsDemo.RedisAddr,
+		Password: gdownloader.SettingsDemo.RedisPassword,
+		DB:       gdownloader.SettingsDemo.RedisDB,
 	})
 	sender := send.NewSender(client, "example:start_urls", "example:queue")
 	// 添加一个链接到start urls
