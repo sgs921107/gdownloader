@@ -8,8 +8,10 @@
 package gdownloader
 
 import (
-	"github.com/sgs921107/gspider/item"
 	"net/http"
+	"encoding/json"
+
+	"github.com/sgs921107/gcommon"
 )
 
 // DownloaderItem 下载器解析下载内容的结构
@@ -24,12 +26,12 @@ type DownloaderItem struct {
 	Headers  http.Header
 }
 
-// ToMap item to map
-func (i DownloaderItem) ToMap() (item.Map, error) {
-	return item.ToMap(i)
+// ToMapSA item to map[string]interface{}
+func (i DownloaderItem) ToMapSA() (gcommon.MapSA, error) {
+	return gcommon.StructToMapSA(i)
 }
 
 // ToJSON item to json
-func (i DownloaderItem) ToJSON() ([]byte, error) {
-	return item.ToJSON(i)
+func (i *DownloaderItem) ToJSON() ([]byte, error) {
+	return json.Marshal(i)
 }

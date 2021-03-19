@@ -10,7 +10,6 @@ package gdownloader
 import (
 	"github.com/sgs921107/gcommon"
 	"github.com/sgs921107/gspider"
-	"log"
 )
 
 // CtxMap 上下文的类型
@@ -29,13 +28,14 @@ func CtxToMap(ctx *gspider.Context) CtxMap {
 // BaseDownloader 定义下载器的机构
 type BaseDownloader struct {
 	Spider   *gspider.RedisSpider
-	Logger   *log.Logger
+	Logger	 *gspider.Logger
 	settings *DownloaderSettings
+	onResponse	 func(resp *gspider.Response)
 }
 
 // Parse 解析方法
-func (d *BaseDownloader) Parse(response *gspider.Response) DownloaderItem {
-	item := DownloaderItem{}
+func (d *BaseDownloader) Parse(response *gspider.Response) *DownloaderItem {
+	item := &DownloaderItem{}
 	req := response.Request
 	item.URL = req.URL.String()
 	item.Method = req.Method
@@ -49,19 +49,21 @@ func (d *BaseDownloader) Parse(response *gspider.Response) DownloaderItem {
 }
 
 // Save 存储方法
-func (d *BaseDownloader) Save(item DownloaderItem) {
+func (d *BaseDownloader) save(item *DownloaderItem) {
 	data, err := item.ToJSON()
 	if err != nil {
-		d.Logger.Printf("serialize item failed: %s", err.Error())
+		d.Logger.WithFields(gspider.LogFields{
+			"errMsg": err.Error(),
+		}).Error("Serialize item failed")
 		return
 	}
-	d.Logger.Print(string(data))
+	d.Logger.Debug(string(data))
 }
 
 // OnResponse response钩子, 用于解析并存储每个请求的内容
 func (d *BaseDownloader) OnResponse(response *gspider.Response) {
 	item := d.Parse(response)
-	d.Save(item)
+	d.save(item)
 }
 
 // AddDownloadTime 记录开始下载时的时间, 单位: 纳秒
@@ -72,4 +74,22 @@ func (d *BaseDownloader) AddDownloadTime(r *gspider.Request) {
 // AddDownloadedTime 记录接收到返回时的时间, 单位: 纳秒
 func (d *BaseDownloader) AddDownloadedTime(r *gspider.Response) {
 	r.Ctx.Put("downloadedTime", gcommon.TimeStamp(1))
+}
+
+func (d *BaseDownloader) init() {
+	if d.Spider == nil {
+		panic("Spider Not Instance")
+	}
+	if d.onResponse == nil {
+		d.onResponse = d.OnResponse
+	}
+	d.Spider.OnRequest(d.AddDownloadTime)
+	d.Spider.OnResponse(d.AddDownloadedTime)
+	d.Spider.OnResponse(d.onResponse)
+}
+
+// Run run downloader
+func (d *BaseDownloader) Run() {
+	d.init()
+	d.Spider.Start()
 }
