@@ -24,18 +24,20 @@ import (
 
 // BaseSender base sender
 type BaseSender struct {
-	Client    *redis.Client
-	UrlsQueue string
-	ReqsQueue string
+	Client    	*redis.Client
+	UrlsQueue 	string
+	ReqsQueue 	string
+	Topic		string
 }
 
 // AddURL add a url
-func (s *BaseSender) AddURL(url string) {
+func (s BaseSender) AddURL(url string) {
 	s.Client.RPush(s.UrlsQueue, url)
 }
 
 // AddRequest add a req
-func (s *BaseSender) AddRequest(req *Request) {
+func (s BaseSender) AddRequest(req *Request) {
+	req.Ctx["Topic"] = s.Topic
 	sr, err := req.Marshal()
 	if err != nil {
 		log.Printf("Serialize request failed: req: %v, err msg: %s", req, err.Error())
@@ -45,12 +47,11 @@ func (s *BaseSender) AddRequest(req *Request) {
 }
 
 // NewSender new a sender
-func NewSender(client *redis.Client, urlsQueue string, reqsQueue string) Sender {
-	var sender Sender
-	sender = &BaseSender{
+func NewSender(client *redis.Client, urlsQueue string, reqsQueue string, topic string) Sender {
+	return &BaseSender{
 		Client:    client,
 		UrlsQueue: urlsQueue,
 		ReqsQueue: reqsQueue,
+		Topic: topic,
 	}
-	return sender
 }

@@ -29,7 +29,7 @@ func CtxToMap(ctx *gspider.Context) CtxMap {
 type BaseDownloader struct {
 	Spider   *gspider.RedisSpider
 	Logger	 *gspider.Logger
-	settings *DownloaderSettings
+	settings DownloaderSettings
 	onResponse	 func(resp *gspider.Response)
 }
 

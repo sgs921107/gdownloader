@@ -1,0 +1,26 @@
+# [spider]
+Spider_Debug=true
+Spider_FlushOnStart=true
+Spider_ConcurrentReqs=100
+Spider_MaxDepth=10
+Spider_DontFilter=true
+Spider_EnableCookies=false
+Spider_Async=true
+Spider_KeepAlive=false
+Spider_Timeout=30
+Spider_MaxIdleTimeout=0
+
+# [log]
+Log_Level=INFO
+Log_File=
+Log_RotationTime=24
+Log_RotationMaxAge=168
+
+# [redis]
+Redis_Prefix=example
+Redis_Addr=172.16.16.126:6379
+Redis_DB=0
+Redis_Password=qaz123
+
+# [Downloader]
+Downloader_MaxTopicSize=10000

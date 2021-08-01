@@ -31,11 +31,11 @@ func (d *RedisDownloader) save(item *DownloaderItem) {
 	// 如果指定了存储的topic则存入指定的topic, 否则以url的host为topic
 	topic, ok := item.Ctx["Topic"].(string)
 	if !ok {
-		prefix := d.settings.RedisPrefix
+		prefix := d.settings.Redis.Prefix
 		host, _ := gcommon.FetchURLHost(item.URL)
 		topic = prefix + ":items:" + host
 	}
-	size := d.settings.MaxTopicSize
+	size := d.settings.Downloader.MaxTopicSize
 	if size == 0 {
 		d.Client.RPush(topic, string(data))
 	} else {
@@ -51,9 +51,9 @@ func (d *RedisDownloader) OnResponse(response *gspider.Response) {
 }
 
 // NewRedisDownloader 实例化一个分布式下载器
-func NewRedisDownloader(settings *DownloaderSettings) *RedisDownloader {
-	spiderSettings := settings.createSpiderSettings()
-	spider := gspider.NewRedisSpider(settings.RedisKey, spiderSettings)
+func NewRedisDownloader(settings DownloaderSettings) *RedisDownloader {
+	spiderSettings := settings.SpiderSettings
+	spider := gspider.NewRedisSpider(spiderSettings)
 	rd := &RedisDownloader{
 		BaseDownloader: BaseDownloader{
 			Spider:   spider,

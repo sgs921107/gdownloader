@@ -12,8 +12,9 @@ import (
 )
 
 func main() {
+	settings := gdownloader.NewDownloaderSettings("env_demo")
 	// 生成一个redis downloader实例
-	rd := gdownloader.NewRedisDownloader(&gdownloader.SettingsDemo)
+	rd := gdownloader.NewRedisDownloader(settings)
 	rd.Spider.Client.RPush(rd.Spider.RedisKey, "http://www.baidu.com")
 	rd.Run()
 }
