@@ -23,9 +23,9 @@ type RedisDownloader struct {
 func (d *RedisDownloader) save(item *DownloaderItem) {
 	data, err := item.ToJSON()
 	if err != nil {
-		d.Logger.WithFields(gspider.LogFields{
-			"errMsg": err.Error(),
-		}).Error("Serialize item failed")
+		d.Logger.Errorw("Serialize Item Failed",
+			"errMsg", err.Error(),
+		)
 		return
 	}
 	// 如果指定了存储的topic则存入指定的topic, 否则以url的host为topic

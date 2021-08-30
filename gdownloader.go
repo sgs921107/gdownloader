@@ -52,9 +52,9 @@ func (d *BaseDownloader) Parse(response *gspider.Response) *DownloaderItem {
 func (d *BaseDownloader) save(item *DownloaderItem) {
 	data, err := item.ToJSON()
 	if err != nil {
-		d.Logger.WithFields(gspider.LogFields{
-			"errMsg": err.Error(),
-		}).Error("Serialize item failed")
+		d.Logger.Errorw("Serialize Item Failed",
+			"errMsg", err.Error(),
+		)
 		return
 	}
 	d.Logger.Debug(string(data))
@@ -91,5 +91,6 @@ func (d *BaseDownloader) init() {
 // Run run downloader
 func (d *BaseDownloader) Run() {
 	d.init()
+	d.Spider.AddExtension(NewSignalExtension())
 	d.Spider.Start()
 }
