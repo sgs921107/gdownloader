@@ -24,3 +24,5 @@ Redis_Password=qaz123
 
 # [Downloader]
 Downloader_MaxTopicSize=10000
+Downloader_ClearHead=false
+Downloader_GizpCompress=true

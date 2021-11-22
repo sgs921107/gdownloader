@@ -36,7 +36,7 @@ func main() {
 		},
 	}
 	var url = "https://www.example.com"
-	settings := gdownloader.NewDownloaderSettings("env_demo")
+	settings := gdownloader.NewDownloaderSettings("/etc/gdownloader/.env")
 	client := redis.NewClient(&redis.Options{
 		// 你自己的redis配置
 		Addr:     settings.Redis.Addr,

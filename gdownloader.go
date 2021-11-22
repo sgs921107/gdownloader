@@ -8,8 +8,13 @@
 package gdownloader
 
 import (
+	"bytes"
+	"strings"
+	"compress/gzip"
+
 	"github.com/sgs921107/gcommon"
 	"github.com/sgs921107/gspider"
+	"github.com/antchfx/htmlquery"
 )
 
 // CtxMap 上下文的类型
@@ -25,72 +30,130 @@ func CtxToMap(ctx *gspider.Context) CtxMap {
 	return data
 }
 
-// BaseDownloader 定义下载器的机构
-type BaseDownloader struct {
-	Spider   *gspider.RedisSpider
-	Logger	 *gspider.Logger
-	settings DownloaderSettings
-	onResponse	 func(resp *gspider.Response)
+// Downloader 定义下载器接口
+type Downloader interface {
+	// 解析方法
+	parse(response *gspider.Response) (*DownloaderItem, error)
+	// 存储方法
+	save(item *DownloaderItem)
+	// spider实例
+	Spider() *gspider.RedisSpider
+	// 启动
+	Run()
 }
 
-// Parse 解析方法
-func (d *BaseDownloader) Parse(response *gspider.Response) *DownloaderItem {
-	item := &DownloaderItem{}
+// BaseDownloader 定义下载器的机构
+type BaseDownloader struct {
+	spider   	*gspider.RedisSpider
+	logger	 	*gspider.Logger
+	settings 	DownloaderSettings
+	save		func(item *DownloaderItem)
+}
+
+// Spider spider实例
+func (d *BaseDownloader) Spider() *gspider.RedisSpider {
+	return d.spider
+}
+
+func (d BaseDownloader) clearHead(text string) string {
+	if doc, err := htmlquery.Parse(strings.NewReader(text)); err == nil {
+		if bodyNode := htmlquery.FindOne(doc, "/html/body"); bodyNode != nil {
+			return strings.TrimSpace(htmlquery.OutputHTML(bodyNode, false))
+		}
+	}
+	return text
+}
+
+func (d BaseDownloader) compress(text string) (string, error) {
+	var buf bytes.Buffer
+	gz := gzip.NewWriter(&buf)
+	defer gz.Close()
+	if _, err := gz.Write([]byte(text)); err != nil {
+		return "", err
+	}
+	if err := gz.Flush(); err != nil {
+		return "", err
+	}
+	return buf.String(), nil
+}
+
+// parse 解析方法
+func (d *BaseDownloader) parse(response *gspider.Response) (item *DownloaderItem, err error) {
+	respBody := string(response.Body)
+	// 清除head, 只保留body数据
+	if d.settings.Downloader.ClearHead {
+		respBody = d.clearHead(respBody)
+	}
+	if d.settings.Downloader.GzipCompress {
+		respBody, err = d.compress(respBody)
+		if err != nil {
+			return item, err
+		}
+	}
+	item = &DownloaderItem{}
 	req := response.Request
 	item.URL = req.URL.String()
 	item.Method = req.Method
 	item.Depth = req.Depth
 	item.ReqBody = gcommon.ReaderToString(req.Body)
-	item.RespBody = string(response.Body)
+	item.RespBody = respBody
 	item.Ctx = CtxToMap(response.Ctx)
 	item.Status = response.StatusCode
 	item.Headers = *response.Headers
-	return item
+	return item, nil
 }
 
-// Save 存储方法
-func (d *BaseDownloader) save(item *DownloaderItem) {
+// example
+func (d *BaseDownloader) _save(item *DownloaderItem) {
 	data, err := item.ToJSON()
 	if err != nil {
-		d.Logger.Errorw("Serialize Item Failed",
+		d.logger.Errorw("Serialize Item Failed",
 			"errMsg", err.Error(),
 		)
 		return
 	}
-	d.Logger.Debug(string(data))
+	d.logger.Debug(string(data))
 }
 
-// OnResponse response钩子, 用于解析并存储每个请求的内容
-func (d *BaseDownloader) OnResponse(response *gspider.Response) {
-	item := d.Parse(response)
+// onResponse response钩子, 用于解析并存储每个请求的内容
+func (d *BaseDownloader) onResponse(response *gspider.Response) {
+	item, err := d.parse(response)
+	if err != nil {
+		d.logger.Errorw("Parse Response Error",
+			"errMsg", err.Error(),
+		)
+		return
+	}
+	item.Ctx["saveTime"] = gcommon.TimeStamp(1)
 	d.save(item)
 }
 
-// AddDownloadTime 记录开始下载时的时间, 单位: 纳秒
-func (d *BaseDownloader) AddDownloadTime(r *gspider.Request) {
+// addDownloadTime 记录开始下载时的时间, 单位: 纳秒
+func (d *BaseDownloader) addDownloadTime(r *gspider.Request) {
 	r.Ctx.Put("downloadTime", gcommon.TimeStamp(1))
 }
 
-// AddDownloadedTime 记录接收到返回时的时间, 单位: 纳秒
-func (d *BaseDownloader) AddDownloadedTime(r *gspider.Response) {
+// addDownloadedTime 记录接收到返回时的时间, 单位: 纳秒
+func (d *BaseDownloader) addDownloadedTime(r *gspider.Response) {
 	r.Ctx.Put("downloadedTime", gcommon.TimeStamp(1))
 }
 
 func (d *BaseDownloader) init() {
-	if d.Spider == nil {
+	if d.spider == nil {
 		panic("Spider Not Instance")
 	}
-	if d.onResponse == nil {
-		d.onResponse = d.OnResponse
+	if d.save == nil {
+		d.save = d._save
 	}
-	d.Spider.OnRequest(d.AddDownloadTime)
-	d.Spider.OnResponse(d.AddDownloadedTime)
-	d.Spider.OnResponse(d.onResponse)
+	d.spider.OnRequest(d.addDownloadTime)
+	d.spider.OnResponse(d.addDownloadedTime)
+	d.spider.OnResponse(d.onResponse)
 }
 
 // Run run downloader
 func (d *BaseDownloader) Run() {
 	d.init()
-	d.Spider.AddExtension(NewSignalExtension())
-	d.Spider.Start()
+	// 添加信号扩展
+	d.spider.AddExtension(NewSignalExtension())
+	d.spider.Start()
 }

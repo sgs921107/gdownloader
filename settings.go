@@ -33,7 +33,11 @@ type DownloaderSettings struct {
 	// download settings
 	Downloader	struct {
 		// 存储页面数据的最大数量  list元素超出将被裁剪, 避免内存过高
-		MaxTopicSize 	int64	`default:"10000"`
+		MaxTopicSize	int64	`default:"10000"`
+  		// 是否清除html页面的head内容, 只保留body数据
+		ClearHead		bool 	`default:"false"`
+		// 是否使用gzip对下载页面内容进行压缩
+		GzipCompress	bool	`default:"false"`
 	}
 }
 

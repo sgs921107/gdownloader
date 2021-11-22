@@ -3,6 +3,7 @@ github.com/PuerkitoBio/goquery
 # github.com/andybalholm/cascadia v1.2.0
 github.com/andybalholm/cascadia
 # github.com/antchfx/htmlquery v1.2.3
+## explicit
 github.com/antchfx/htmlquery
 # github.com/antchfx/xmlquery v1.2.4
 github.com/antchfx/xmlquery

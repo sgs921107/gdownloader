@@ -23,7 +23,7 @@ type RedisDownloader struct {
 func (d *RedisDownloader) save(item *DownloaderItem) {
 	data, err := item.ToJSON()
 	if err != nil {
-		d.Logger.Errorw("Serialize Item Failed",
+		d.logger.Errorw("Serialize Item Failed",
 			"errMsg", err.Error(),
 		)
 		return
@@ -43,25 +43,18 @@ func (d *RedisDownloader) save(item *DownloaderItem) {
 	}
 }
 
-// OnResponse response钩子, 用于解析并存储每个请求的内容
-func (d *RedisDownloader) OnResponse(response *gspider.Response) {
-	item := d.Parse(response)
-	item.Ctx["saveTime"] = gcommon.TimeStamp(1)
-	d.save(item)
-}
-
 // NewRedisDownloader 实例化一个分布式下载器
-func NewRedisDownloader(settings DownloaderSettings) *RedisDownloader {
+func NewRedisDownloader(settings DownloaderSettings) Downloader {
 	spiderSettings := settings.SpiderSettings
 	spider := gspider.NewRedisSpider(spiderSettings)
 	rd := &RedisDownloader{
 		BaseDownloader: BaseDownloader{
-			Spider:   spider,
-			Logger:   spider.Logger,
+			spider:   spider,
+			logger:   spider.Logger,
 			settings: settings,
 		},
 		Client: spider.Client,
 	}
-	rd.onResponse = rd.OnResponse
+	rd.BaseDownloader.save = rd.save
 	return rd
 }
