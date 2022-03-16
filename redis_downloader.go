@@ -35,11 +35,10 @@ func (d *RedisDownloader) save(item *DownloaderItem) {
 		host, _ := gcommon.FetchURLHost(item.URL)
 		topic = prefix + ":items:" + host
 	}
-	size := d.settings.Downloader.MaxTopicSize
-	if size == 0 {
-		d.Client.RPush(topic, string(data))
-	} else {
+	if size := d.settings.Downloader.MaxTopicSize; size > 0 {
 		d.Client.RPushTrim(topic, size, string(data))
+	} else {
+		d.Client.RPush(topic, string(data))
 	}
 }
 
