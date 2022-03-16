@@ -12,7 +12,10 @@ import (
 )
 
 func main() {
-	settings := gdownloader.NewDownloaderSettings("/etc/gdownloader/.env")
+	settings, err := gdownloader.NewSettingsFromEnvFile("/etc/gdownloader/.env")
+	if err != nil {
+		panic(err.Error())
+	}
 	// 生成一个redis downloader实例
 	rd := gdownloader.NewRedisDownloader(settings)
 	spider := rd.Spider()

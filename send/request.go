@@ -26,26 +26,26 @@ import (
 
 // SerializableRequest 序列化request结构
 type SerializableRequest struct {
-	URL			string
-	Method		string
-	Depth		int
-	Body		[]byte
-	ID			uint32
-	Ctx			map[string]interface{}
-	Headers		*http.Header
-	ProxyURL	string
+	URL      string
+	Method   string
+	Depth    int
+	Body     []byte
+	ID       uint32
+	Ctx      map[string]interface{}
+	Headers  *http.Header
+	ProxyURL string
 }
 
 // Request 请求结构
 type Request struct {
-	URL			string
-	Method		string
-	Depth		int
-	Body		map[string]string
-	ID			uint32
-	Ctx			map[string]interface{}
-	Headers		map[string]string
-	ProxyURL	string
+	URL      string
+	Method   string
+	Depth    int
+	Body     map[string]string
+	ID       uint32
+	Ctx      map[string]interface{}
+	Headers  map[string]string
+	ProxyURL string
 }
 
 // 格式化headers
@@ -67,13 +67,13 @@ func (r *Request) Marshal() ([]byte, error) {
 	body := gcommon.MapToBytes(r.Body)
 	headers := r.formatHeaders()
 	sr := &SerializableRequest{
-		URL: u.String(),
-		Method: r.Method,
-		Depth: r.Depth,
-		Body: body,
-		ID: r.ID,
-		Ctx: r.Ctx,
-		Headers: headers,
+		URL:      u.String(),
+		Method:   r.Method,
+		Depth:    r.Depth,
+		Body:     body,
+		ID:       r.ID,
+		Ctx:      r.Ctx,
+		Headers:  headers,
 		ProxyURL: r.ProxyURL,
 	}
 	return json.Marshal(sr)

@@ -8,50 +8,48 @@
 package gdownloader
 
 import (
-	"sync"
-
 	"github.com/sgs921107/gcommon"
 	"github.com/sgs921107/gspider"
-)
-
-var (
-	// DefaultEnvPath defalut env path
-	defaultEnvPath = "/etc/gdownloader/.env"
-	settings = DownloaderSettings{}
-	settingsOnce sync.Once
 )
 
 // SpiderSettings spider settings type
 type SpiderSettings = gspider.SpiderSettings
 
-// DownloaderSettings downloader的配置结构
+// Settings downloader的配置结构
 // 使数据结构简单，不继承自spider settings, 通过反射来生成spdier settings
-type DownloaderSettings struct {
+type Settings struct {
 	// SpiderSettings
 	SpiderSettings
 
 	// download settings
-	Downloader	struct {
+	Downloader struct {
 		// 存储页面数据的最大数量  list元素超出将被裁剪, 避免内存过高
-		MaxTopicSize	int64	`default:"10000"`
-  		// 是否清除html页面的head内容, 只保留body数据
-		ClearHead		bool 	`default:"false"`
+		// 0则不进行裁剪
+		MaxTopicSize int64 `default:"10000"`
+		// 是否清除html页面的head内容, 只保留body数据
+		ClearHead bool `default:"false"`
 		// 是否使用gzip对下载页面内容进行压缩
-		GzipCompress	bool	`default:"false"`
+		GzipCompress bool `default:"false"`
 	}
 }
 
+// NewSettingsFromEnv new a downlaoder settings from env
+func NewSettingsFromEnv() (*Settings, error) {
+	var settings Settings
+	gcommon.EnvIgnorePrefix()
+	if err := gcommon.EnvFill(&settings); err != nil {
+		return nil, err
+	}
+	if err := gcommon.EnvFill(&settings.SpiderSettings); err != nil {
+		return nil, err
+	}
+	return &settings, nil
+}
 
-// NewDownloaderSettings new a downlaoder settings
-func NewDownloaderSettings(envFiles ...string) DownloaderSettings {
-	settingsOnce.Do(func(){
-		if len(envFiles) == 0 {
-			envFiles = append(envFiles, defaultEnvPath)
-		}
-		gcommon.OverLoadEnvFiles(envFiles...)
-		gcommon.EnvIgnorePrefix()
-		gcommon.EnvFill(&settings)
-		gcommon.EnvFill(&settings.SpiderSettings)
-	})
-	return settings
+// NewSettingsFromEnvFile new a downloader settings from env file
+func NewSettingsFromEnvFile(envFile string) (*Settings, error) {
+	if err := gcommon.LoadEnvFile(envFile, true); err != nil {
+		return nil, err
+	}
+	return NewSettingsFromEnv()
 }

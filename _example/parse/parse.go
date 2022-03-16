@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	settings := gdownloader.NewDownloaderSettings("/etc/gdownloader/.env")
+	settings, _ := gdownloader.NewSettingsFromEnvFile("/etc/gdownloader/.env")
 	client := redis.NewClient(&redis.Options{
 		// 你自己的redis配置
 		Addr:     settings.Redis.Addr,
@@ -21,7 +21,7 @@ func main() {
 	prefix := settings.Redis.Prefix
 	for {
 		page, err := client.LPop(prefix + ":items:www.example.com").Result()
-		if err == gredis.RedisNil{
+		if err == gredis.RedisNil {
 			break
 		} else if err != nil {
 			fmt.Println("ValueError: ", err.Error())

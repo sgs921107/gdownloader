@@ -43,7 +43,7 @@ func (d *RedisDownloader) save(item *DownloaderItem) {
 }
 
 // NewRedisDownloader 实例化一个分布式下载器
-func NewRedisDownloader(settings DownloaderSettings) Downloader {
+func NewRedisDownloader(settings *Settings) Downloader {
 	spiderSettings := settings.SpiderSettings
 	spider := gspider.NewRedisSpider(spiderSettings)
 	rd := &RedisDownloader{
