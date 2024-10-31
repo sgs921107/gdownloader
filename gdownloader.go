@@ -79,19 +79,20 @@ func (d BaseDownloader) compress(text string) (string, error) {
 
 // parse 解析方法
 func (d BaseDownloader) parse(response *gspider.Response) (item *DownloaderItem, err error) {
+	req := response.Request
 	respBody := string(response.Body)
 	// 清除head, 只保留body数据
-	if d.settings.Downloader.ClearHead {
+	if ok, _ := req.Ctx.GetAny("clearHead").(bool); ok {
 		respBody = d.clearHead(respBody)
 	}
-	if d.settings.Downloader.GzipCompress {
+	// 压缩
+	if ok, _ := req.Ctx.GetAny("gzipCompress").(bool); ok {
 		respBody, err = d.compress(respBody)
 		if err != nil {
 			return item, err
 		}
 	}
 	item = &DownloaderItem{}
-	req := response.Request
 	item.URL = req.URL.String()
 	item.Method = req.Method
 	item.Depth = req.Depth

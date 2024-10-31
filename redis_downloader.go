@@ -8,7 +8,6 @@
 package gdownloader
 
 import (
-	"github.com/sgs921107/gcommon"
 	"github.com/sgs921107/gredis"
 	"github.com/sgs921107/gspider"
 )
@@ -28,12 +27,11 @@ func (d *RedisDownloader) save(item *DownloaderItem) {
 		)
 		return
 	}
-	// 如果指定了存储的topic则存入指定的topic, 否则以url的host为topic
-	topic, ok := item.Ctx["Topic"].(string)
+	// 将解析出的数据存入指定的topic, 如果未指定则不存储
+	topic, ok := item.Ctx["topic"].(string)
 	if !ok {
-		prefix := d.settings.Redis.Prefix
-		host, _ := gcommon.FetchURLHost(item.URL)
-		topic = prefix + ":items:" + host
+		d.logger.Warnf("Item Ignored: topic not specified, url: %s", item.URL)
+		return
 	}
 	if size := d.settings.Downloader.MaxTopicSize; size > 0 {
 		d.Client.RPushTrim(topic, size, string(data))

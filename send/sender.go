@@ -24,20 +24,28 @@ import (
 
 // BaseSender base sender
 type BaseSender struct {
-	Client    	*redis.Client
-	UrlsQueue 	string
-	ReqsQueue 	string
-	Topic		string
+	Client       *redis.Client
+	UrlsQueue    string
+	ReqsQueue    string
+	DefaultTopic string `default:"default"`
 }
 
 // AddURL add a url
 func (s BaseSender) AddURL(url string) {
-	s.Client.RPush(s.UrlsQueue, url)
+	// s.Client.RPush(s.UrlsQueue, url)
+	// 将url转换为一个request实例
+	s.AddRequest(&Request{
+		URL:    url,
+		Method: "GET",
+		Ctx:    make(map[string]interface{}),
+	})
 }
 
 // AddRequest add a req
 func (s BaseSender) AddRequest(req *Request) {
-	req.Ctx["Topic"] = s.Topic
+	if req.Ctx["topic"] == nil {
+		req.Ctx["topic"] = s.DefaultTopic
+	}
 	sr, err := req.Marshal()
 	if err != nil {
 		log.Printf("Serialize request failed: req: %v, err msg: %s", req, err.Error())
@@ -47,11 +55,11 @@ func (s BaseSender) AddRequest(req *Request) {
 }
 
 // NewSender new a sender
-func NewSender(client *redis.Client, urlsQueue string, reqsQueue string, topic string) Sender {
+func NewSender(client *redis.Client, urlsQueue string, reqsQueue string, defaultTopic string) Sender {
 	return &BaseSender{
-		Client:    client,
-		UrlsQueue: urlsQueue,
-		ReqsQueue: reqsQueue,
-		Topic: topic,
+		Client:       client,
+		UrlsQueue:    urlsQueue,
+		ReqsQueue:    reqsQueue,
+		DefaultTopic: defaultTopic,
 	}
 }

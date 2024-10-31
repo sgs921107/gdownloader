@@ -11,32 +11,31 @@
 package main
 
 import (
+	"bytes"
 	"github.com/go-redis/redis"
 	"github.com/sgs921107/gdownloader"
 	"github.com/sgs921107/gdownloader/send"
 )
 
 func main() {
-	var params = map[string]string{
-		"langx": "zh-cn",
-		"gid":   "4584749",
-		"ltype": "4",
-		"date":  "2020-12-09",
-	}
 
+	settings, _ := gdownloader.NewSettingsFromEnvFile("/etc/gdownloader/.env")
+	body := `{"invoke_info":{"pos_1":[{}],"pos_2":[{}],"pos_3":[{}]}}`
 	var req = &send.Request{
-		URL:    "http://www.example.com/app/member/get_game_allbets.php",
+		URL:    "https://ug.baidu.com/mcp/pc/pcsearch",
 		Method: "POST",
-		Body:   params,
+		Body:   bytes.NewBufferString(body).Bytes(),
 		Headers: map[string]string{
-			"Origin": "http://www.example.com",
+			"Origin":       "https://www.baidu.com",
+			"Referer":      "https://www.baidu.com",
+			"Content-Type": "application/json",
 		},
 		Ctx: map[string]interface{}{
-			"Age": 18,
+			"clearHead":    true,
+			"gzipCompress": true,
 		},
 	}
-	var url = "https://www.example.com"
-	settings, _ := gdownloader.NewSettingsFromEnvFile("/etc/gdownloader/.env")
+	var url = "https://translate.google.com"
 	client := redis.NewClient(&redis.Options{
 		// 你自己的redis配置
 		Addr:     settings.Redis.Addr,

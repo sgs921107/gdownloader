@@ -20,7 +20,7 @@ func main() {
 	parser := parse.NewParser()
 	prefix := settings.Redis.Prefix
 	for {
-		page, err := client.LPop(prefix + ":items:www.example.com").Result()
+		page, err := client.LPop(prefix + ":items").Result()
 		if err == gredis.RedisNil {
 			break
 		} else if err != nil {

@@ -19,7 +19,6 @@ package send
 
 import (
 	"encoding/json"
-	"github.com/sgs921107/gcommon"
 	"net/http"
 	"net/url"
 )
@@ -41,7 +40,7 @@ type Request struct {
 	URL      string
 	Method   string
 	Depth    int
-	Body     map[string]string
+	Body     []byte
 	ID       uint32
 	Ctx      map[string]interface{}
 	Headers  map[string]string
@@ -64,13 +63,12 @@ func (r *Request) Marshal() ([]byte, error) {
 	if err != nil {
 		return []byte{}, nil
 	}
-	body := gcommon.MapToBytes(r.Body)
 	headers := r.formatHeaders()
 	sr := &SerializableRequest{
 		URL:      u.String(),
 		Method:   r.Method,
 		Depth:    r.Depth,
-		Body:     body,
+		Body:     r.Body,
 		ID:       r.ID,
 		Ctx:      r.Ctx,
 		Headers:  headers,
