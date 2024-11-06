@@ -24,10 +24,12 @@ import (
 
 // BaseSender base sender
 type BaseSender struct {
-	Client       *redis.Client
-	UrlsQueue    string
-	ReqsQueue    string
-	DefaultTopic string `default:"default"`
+	Client              *redis.Client
+	UrlsQueue           string
+	ReqsQueue           string
+	DefaultTopic        string `default:"default"`
+	DefaultClearHead    bool   `default:"true"`
+	DefaultGzipCompress bool   `default:"true"`
 }
 
 // AddURL add a url
@@ -45,6 +47,12 @@ func (s BaseSender) AddURL(url string) {
 func (s BaseSender) AddRequest(req *Request) {
 	if req.Ctx["topic"] == nil {
 		req.Ctx["topic"] = s.DefaultTopic
+	}
+	if req.Ctx["clearHead"] == nil {
+		req.Ctx["clearHead"] = s.DefaultClearHead
+	}
+	if req.Ctx["gzipCompress"] == nil {
+		req.Ctx["gzipCompress"] = s.DefaultGzipCompress
 	}
 	sr, err := req.Marshal()
 	if err != nil {

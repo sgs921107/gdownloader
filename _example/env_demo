@@ -24,5 +24,3 @@ Redis_Password=online
 
 # [Downloader]
 Downloader_MaxTopicSize=10000
-Downloader_ClearHead=false
-Downloader_GizpCompress=true
